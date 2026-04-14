@@ -582,9 +582,28 @@ def _truncate_text(text: str, max_chars: int = 12000) -> str:
     return f"{head}\n\n[...truncated...]\n\n{tail}"
 
 
+def _build_source_fetch_headers(source_url: str) -> dict:
+    user_agent = os.getenv(
+        "SOURCE_FETCH_USER_AGENT",
+        (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/123.0.0.0 Safari/537.36"
+        ),
+    )
+    return {
+        "User-Agent": user_agent,
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,application/pdf,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Referer": source_url,
+        "Connection": "keep-alive",
+    }
+
+
 async def _fetch_source_text(source_url: str) -> str:
+    headers = _build_source_fetch_headers(source_url)
     async with httpx.AsyncClient(timeout=30.0) as client:
-        response = await client.get(source_url)
+        response = await client.get(source_url, headers=headers)
         response.raise_for_status()
     content_type = response.headers.get("content-type", "").lower()
 
@@ -610,8 +629,9 @@ async def _fetch_source_text(source_url: str) -> str:
 
 
 async def _fetch_html(source_url: str) -> str:
+    headers = _build_source_fetch_headers(source_url)
     async with httpx.AsyncClient(timeout=30.0) as client:
-        response = await client.get(source_url)
+        response = await client.get(source_url, headers=headers)
         response.raise_for_status()
         return response.text
 
