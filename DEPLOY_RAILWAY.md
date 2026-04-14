@@ -36,6 +36,7 @@ docker compose down
    - Service A: `backend` (root directory: `backend`)
    - Service B: `frontend` (root directory: `frontend`)
 4. For each service, keep **Dockerfile** build mode (Railway will detect each Dockerfile).
+5. This repo now includes `backend/railway.json` and `frontend/railway.json` to force Dockerfile builds and avoid Railpack build-plan errors.
 
 ## 4) Configure backend service variables
 
