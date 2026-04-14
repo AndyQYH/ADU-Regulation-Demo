@@ -9,4 +9,4 @@ langchain
 langchain-community
 langchain-openai
 langchain-text-splitters
-agent-framework --pre
+agent-framework==1.0.0rc4

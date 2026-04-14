@@ -4,6 +4,7 @@ import logging
 import os
 import re
 import time
+import inspect
 from typing import Any
 
 from agent_framework.openai import OpenAIChatClient
@@ -43,8 +44,11 @@ def _build_chat_client() -> OpenAIChatClient:
     if not api_key:
         raise ValueError("OPENAI_API_KEY is required for Agent Framework chat workflow")
 
+    constructor_params = inspect.signature(OpenAIChatClient.__init__).parameters
+    model_kwarg = "model_id" if "model_id" in constructor_params else "model"
+
     return OpenAIChatClient(
-        model_id=model_id,
+        **{model_kwarg: model_id},
         api_key=api_key,
         base_url=base_url,
     )
