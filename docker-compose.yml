@@ -1,0 +1,27 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: adu-backend
+    env_file:
+      - ./backend/.env
+    environment:
+      FRONTEND_ORIGINS: http://localhost:3000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/data:/app/data
+      - ./backend/logs:/app/logs
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: adu-frontend
+    environment:
+      FASTAPI_URL: http://backend:8000
+      NEXT_PUBLIC_BACKEND_URL: http://localhost:8000
+      NEXT_PUBLIC_CHAT_API_URL: /api/chat
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"

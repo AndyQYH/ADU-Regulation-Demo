@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+openai
+python-dotenv
+httpx
+beautifulsoup4
+pypdf
+langchain
+langchain-community
+langchain-openai
+langchain-text-splitters
+agent-framework --pre
